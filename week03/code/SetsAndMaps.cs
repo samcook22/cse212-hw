@@ -20,10 +20,26 @@ public static class SetsAndMaps
     /// </summary>
     /// <param name="words">An array of 2-character words (lowercase, no duplicates)</param>
     public static string[] FindPairs(string[] words)
+{
+    HashSet<string> seen = new HashSet<string>();
+    List<string> result = new List<string>();
+
+    foreach (var word in words)
     {
-        // TODO Problem 1 - ADD YOUR CODE HERE
-        return [];
+        string reverse = new string(word.Reverse().ToArray());
+        if (seen.Contains(reverse))
+        {
+            result.Add($"{word} & {reverse}");
+        }
+        else
+        {
+            seen.Add(word);
+        }
     }
+
+    return result.ToArray();
+}
+
 
     /// <summary>
     /// Read a census file and summarize the degrees (education)
@@ -37,16 +53,25 @@ public static class SetsAndMaps
     /// <param name="filename">The name of the file to read</param>
     /// <returns>fixed array of divisors</returns>
     public static Dictionary<string, int> SummarizeDegrees(string filename)
+{
+    var degrees = new Dictionary<string, int>();
+    foreach (var line in File.ReadLines(filename))
     {
-        var degrees = new Dictionary<string, int>();
-        foreach (var line in File.ReadLines(filename))
-        {
-            var fields = line.Split(",");
-            // TODO Problem 2 - ADD YOUR CODE HERE
-        }
+        var fields = line.Split(",");
+        var degree = fields[3].Trim();
 
-        return degrees;
+        if (degrees.ContainsKey(degree))
+        {
+            degrees[degree]++;
+        }
+        else
+        {
+            degrees[degree] = 1;
+        }
     }
+    return degrees;
+}
+
 
     /// <summary>
     /// Determine if 'word1' and 'word2' are anagrams.  An anagram
@@ -65,10 +90,16 @@ public static class SetsAndMaps
     /// using the [] notation.
     /// </summary>
     public static bool IsAnagram(string word1, string word2)
-    {
-        // TODO Problem 3 - ADD YOUR CODE HERE
-        return false;
-    }
+{
+    string Normalize(string word) => new string(word
+        .Replace(" ", "")
+        .ToLower()
+        .OrderBy(c => c)
+        .ToArray());
+
+    return Normalize(word1) == Normalize(word2);
+}
+
 
     /// <summary>
     /// This function will read JSON (Javascript Object Notation) data from the 
